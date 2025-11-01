@@ -25,6 +25,7 @@
 # Let's first import `modal` and define an [`App`](https://modal.com/docs/reference/modal.App).
 # Later, we'll use the name provided for our job queue App to find it from our web app and submit tasks to it.
 
+import re
 from typing import Optional
 
 import modal
@@ -144,8 +145,7 @@ def parse_document(
         result = rendered_output.model_dump_json()
     else:
         text, _, images = marker.output.text_from_rendered(rendered_output)
-
-        result = text
+        result = re.sub(r'!\[.*?\]\(.*?\)', '', text)
 
     return result
 
